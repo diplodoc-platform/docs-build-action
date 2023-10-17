@@ -4,15 +4,14 @@
 
 - `revision` (required) - The revision or version identifier for the documentation to be built.
 - `project-name` (required) - The documentation's project name, as specified in the configuration file's field with the corresponding name.
-- `src-root` (required) - The root directory where the source documentation files are located. The action will use this directory as the base location to look for the source files that need to be built.
 - `storage-bucket` (required) - The name of the storage bucket where the built documentation will be stored. After the documentation is successfully built, it will be uploaded to this specified bucket.
 - `storage-endpoint` (required) - The endpoint URL of the storage service.
 - `storage-access-key-id` (required) - The access key ID associated with the account that has permission to access and upload to the specified storage bucket.
 - `storage-secret-access-key` (required) - The secret access key associated with the account.
 - `storage-region` (required) - The region where the specified storage bucket is located.
+- `src-root` (default: `./`) - The root directory where the source documentation files are located. The action will use this directory as the base location to look for the source files that need to be built.
 - `lint-root` (default: `./_docs-lint`) - The root directory for the linting process. This is an optional parameter, and if not specified, the default value will be used.
 - `build-root` (default: `./_docs-build`) - The root directory for the built documentation. This is an optional parameter, and if not specified, the default value will be used.
-- `shared-storage-bucket` (default: `false`) - This argument specifies whether the storage bucket should be shared across multiple projects.
 
 ## Example
 

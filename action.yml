@@ -7,7 +7,7 @@ inputs:
   project-name:
     required: true
   src-root:
-    required: true
+    default: "./"
   storage-bucket:
     required: true
   storage-endpoint:
@@ -43,10 +43,13 @@ runs:
     - name: Set DEST_DIR
       shell: bash
       run: |
-        if [ "${{ inputs.shared-storage-bucket }}" == "true" ]; then
-          echo "DEST_DIR=${{ inputs.project-name }}/rev/${{ inputs.revision }}" >> $GITHUB_ENV
+        if [[ "${{ inputs.storage-bucket }}" =~ "/" ]]; then
+          PARTS=(${${{ inputs.storage-bucket }}//\// })
+          echo "PREFIX=${PARTS[@]:1}/rev/${{ inputs.revision }}" >> $GITHUB_ENV
+          echo "BUCKET=${PARTS[0]}" >> $GITHUB_ENV  
         else
-          echo "DEST_DIR=rev/${{ inputs.revision }}" >> $GITHUB_ENV
+          echo "PREFIX=rev/${{ inputs.revision }}" >> $GITHUB_ENV
+          echo "BUCKET=${{ inputs.storage-bucket }}" >> $GITHUB_ENV
         fi
     - name: Upload S3
       shell: bash
@@ -55,7 +58,7 @@ runs:
           -i ${{ inputs.build-root }} \
           --endpoint ${{ inputs.storage-endpoint }} \
           --region ${{ inputs.storage-region }} \
-          --bucket ${{ inputs.storage-bucket }} \
-          --prefix ${{ env.DEST_DIR }} \
+          --bucket ${{ env.BUCKET }} \
+          --prefix ${{ env.PREFIX }} \
           --access-key-id ${{ inputs.storage-access-key-id }} \
           --secret-access-key ${{ inputs.storage-secret-access-key }}
