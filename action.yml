@@ -1,20 +1,8 @@
 name: docs-build-action
-description: Build & Upload documentation
+description: Build documentation
 
 inputs:
   revision:
-    required: true
-  project-name:
-    required: true
-  storage-bucket:
-    required: true
-  storage-endpoint:
-    required: true
-  storage-access-key-id:
-    required: true
-  storage-secret-access-key:
-    required: true
-  storage-region:
     required: true
   src-root:
     default: "./"
@@ -22,11 +10,6 @@ inputs:
     default: "./_docs-lint"
   build-root:
     default: "./_docs-build"
-  stage:
-    default: "stable"
-  shared-storage-bucket:
-    default: false
-    type: boolean
 
 runs:
   using: composite
@@ -36,36 +19,60 @@ runs:
         node-version: 18
     - run: npm i @diplodoc/cli -g
       shell: bash
-    - run: yfm -i ${{ inputs.src-root }} -o ${{ inputs.lint-root }}
-      shell: bash
-    - name: build
+    - name: Build md2html
+      id: build-md2html
       run: |
-        yfm -i ${{ inputs.src-root }} -o ${{ inputs.build-root }} --output-format md --add-map-file --allow-custom-resources
+        set +e
+        set -o pipefail
+
+        yfm -i ${{ inputs.src-root }} -o ${{ inputs.lint-root }} | tee './build-html.log'
+
+        echo "exitcode=$?" >> $GITHUB_OUTPUT
       shell: bash
-    - name: Set BUCKET and PREFIX
-      shell: bash
+    - name: Build md2md
+      id: build-md2md
       run: |
-        if [[ "${{ inputs.storage-bucket }}" =~ "/" ]]; then
-          echo "Detected complex bucket name"
-        
-          COMPLEX="${{ inputs.storage-bucket }}"
-          PARTS=(${COMPLEX//\// })
-          PREFIX=${PARTS[@]:1}
-        
-          echo "BUCKET=${PARTS[0]}-${{ inputs.stage }}" >> $GITHUB_ENV
-          echo "PREFIX=${PREFIX// //}/rev/${{ inputs.revision }}" >> $GITHUB_ENV
+        set +e
+        set -o pipefail
+
+        yfm -i ${{ inputs.src-root }} -o ${{ inputs.build-root }} --output-format md --add-map-file --allow-custom-resources | tee './build-md.log'
+
+        echo "exitcode=$?" >> $GITHUB_OUTPUT
+
+      shell: bash
+
+    - name: Save inputs
+      run: |
+        mkdir -p ./inputs
+        echo ${{ inputs.revision }} > ./inputs/revision
+        echo ${{ github.event.number }} > ./inputs/pr-number
+      shell: bash
+    - name: Upload inputs
+      uses: actions/upload-artifact@v3
+      with:
+        name: inputs
+        path: inputs/
+        retention-days: 1
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-output-md
+        path: ${{ inputs.build-root }}
+        retention-days: 1
+    - name: Upload build log
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-log-html
+        path: ./build-html.log
+        retention-days: 1
+    - name: Exit
+      run: |
+        exitcode=${{ steps.build-md2html.outputs.exitcode }}
+
+        if [ "$exitcode" -eq 0 ]; then
+            echo "Build exited successfully."
         else
-          echo "BUCKET=${{ inputs.storage-bucket }}-${{ inputs.stage }}" >> $GITHUB_ENV
-          echo "PREFIX=rev/${{ inputs.revision }}" >> $GITHUB_ENV
+          echo "Build exited with an error. Exit code: $exitcode"
+          exit $exitcode
         fi
-    - name: Upload S3
       shell: bash
-      run: |
-        yfm publish \
-          -i "${{ inputs.build-root }}" \
-          --endpoint "${{ inputs.storage-endpoint }}" \
-          --region "${{ inputs.storage-region }}" \
-          --bucket "${{ env.BUCKET }}" \
-          --prefix "${{ env.PREFIX }}" \
-          --access-key-id "${{ inputs.storage-access-key-id }}" \
-          --secret-access-key "${{ inputs.storage-secret-access-key }}"
