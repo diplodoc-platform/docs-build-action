@@ -21,6 +21,7 @@ name: Build
 
 on:
   pull_request:
+    paths: 'docs/**'
     types: [opened, synchronize]
 
 jobs:
@@ -31,16 +32,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Check for changes
-        uses: dorny/paths-filter@v2
-        id: changes
-        with:
-          filters: |
-            src:
-              - './docs/**'
-
       - name: Build
-        if: steps.changes.outputs.src == 'true'
         uses: diplodoc-platform/docs-build-action@v3
         with:
           revision: "pr-${{ github.event.pull_request.number }}"
