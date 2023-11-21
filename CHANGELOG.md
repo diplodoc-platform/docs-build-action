@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.0
+
+### Features
+
+* PDF generation is supported using [docs2pdf](https://github.com/diplodoc-platform/docs2pdf)
+
 ## 3.0.0
 
 ### Features
