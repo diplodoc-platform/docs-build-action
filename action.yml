@@ -23,7 +23,12 @@ runs:
     - name: Need pdf generation
       id: get-pdf-params
       run: |
-        need_pdf=$(yq -r '.docs-viewer.pdf // false' < ${{ inputs.src-root }}/.yfm)
+        if [[ -e "${{ inputs.src-root }}/.yfm" ]]; then
+          need_pdf=$(yq -r '.docs-viewer.pdf // false' < ${{ inputs.src-root }}/.yfm)
+        else
+          need_pdf=false
+        fi
+
         pdf_args=''
 
         if [[ "$need_pdf" == 'true' ]]; then
