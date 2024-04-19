@@ -3,7 +3,7 @@ description: Build documentation
 
 inputs:
   revision:
-    required: true
+    default: "default_revision"
   src-root:
     default: "./"
   lint-root:
