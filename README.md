@@ -6,7 +6,7 @@ This GitHub action does two things:
 
 ## Inputs
 
-- `revision` (required) - The revision or version identifier for the documentation to be built.
+- `revision` (default: `default_revision`) - The revision or version identifier for the documentation to be built.
 - `src-root` (default: `./`) - The root directory where the source documentation files are located. The action will use this directory as the base location to look for the source files that need to be built.
 - `lint-root` (default: `./_docs-lint`) - The root directory for the linting process. This is an optional parameter, and if not specified, the default value will be used.
 - `build-root` (default: `./_docs-build`) - The root directory for the built documentation. This is an optional parameter, and if not specified, the default value will be used.
