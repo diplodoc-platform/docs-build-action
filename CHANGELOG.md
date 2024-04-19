@@ -1,3 +1,11 @@
+## [3.1.2](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.1...v3.1.2) (2024-04-19)
+
+
+### Bug Fixes
+
+* handle non-existent .yfm file ([6cb4985](https://github.com/diplodoc-platform/docs-build-action/commit/6cb49857ad0d876bc969fc29ac5fef6e2be4a75d))
+* make revision parameter optional ([0451230](https://github.com/diplodoc-platform/docs-build-action/commit/04512308ed175119ff98c04a95f017bc44244efd))
+
 ## [3.1.1](https://github.com/diplodoc-platform/docs-build-action/compare/v4.0.0...v3.1.1) (2024-01-30)
 
 
