@@ -1,3 +1,10 @@
+## [3.1.3](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.2...v3.1.3) (2024-09-04)
+
+
+### Bug Fixes
+
+* upload-artifact include-hidden-files: true ([0e28509](https://github.com/diplodoc-platform/docs-build-action/commit/0e28509b037de756bce8d9247d32cbfa5f162cff))
+
 ## [3.1.2](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.1...v3.1.2) (2024-04-19)
 
 
