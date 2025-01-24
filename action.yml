@@ -81,20 +81,20 @@ runs:
         echo ${{ github.event.number }} > ./inputs/pr-number
       shell: bash
     - name: Upload inputs
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: inputs
         path: inputs/
         retention-days: 1
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: build-output-md
         include-hidden-files: true
         path: ${{ inputs.build-root }}
         retention-days: 1
     - name: Upload build log
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: build-log-html
         path: ./build-html.log
