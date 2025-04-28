@@ -68,9 +68,7 @@ runs:
         set +e
         set -o pipefail
 
-        npm i @diplodoc/docs2pdf@latest -g
-
-        docs2pdf -i ${{ inputs.lint-root }}
+        npx -y -- @diplodoc/pdf-generator@latest -i ${{ inputs.lint-root }}
 
         rsync -r --include='*.pdf' --include='*/' --exclude='*' ${{ inputs.lint-root }}/ ${{ inputs.build-root }}/
 
