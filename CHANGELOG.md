@@ -1,3 +1,10 @@
+## [3.1.5](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.4...v3.1.5) (2025-04-28)
+
+
+### Bug Fixes
+
+* remove the usage of now obsolete `docs2pdf` package, replace it with `pdf-generator` ([fcb0fea](https://github.com/diplodoc-platform/docs-build-action/commit/fcb0fea7efab2e5c54d3b69218a8cd0fedf26c71))
+
 ## [3.1.4](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.3...v3.1.4) (2025-01-24)
 
 ## [3.1.3](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.2...v3.1.3) (2024-09-04)
