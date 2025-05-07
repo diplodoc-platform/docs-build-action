@@ -10,6 +10,12 @@ inputs:
     default: "./_docs-lint"
   build-root:
     default: "./_docs-build"
+  html-only:
+    default: "false"
+    description: "If true, only run md2html without md2md conversion"
+  html-output:
+    default: ""
+    description: "Custom output directory for html, if empty uses lint-root"
 
 runs:
   using: composite
@@ -39,18 +45,30 @@ runs:
         echo "pdf_args=$pdf_args" >> $GITHUB_OUTPUT
       shell: bash
 
+    - name: Set HTML output directory
+      id: set-html-output
+      run: |
+        if [[ -n "${{ inputs.html-output }}" ]]; then
+          echo "html_output=${{ inputs.html-output }}" >> $GITHUB_OUTPUT
+        else
+          echo "html_output=${{ inputs.lint-root }}" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
+
     - name: Build md2html
       id: build-md2html
       run: |
         set +e
         set -o pipefail
 
-        yfm -i ${{ inputs.src-root }} -o ${{ inputs.lint-root }} ${{ steps.get-pdf-params.outputs.pdf_args }} | tee './build-html.log'
+        yfm -i ${{ inputs.src-root }} -o ${{ steps.set-html-output.outputs.html_output }} ${{ steps.get-pdf-params.outputs.pdf_args }} | tee './build-html.log'
 
         echo "exitcode=$?" >> $GITHUB_OUTPUT
       shell: bash
+
     - name: Build md2md
       id: build-md2md
+      if: inputs.html-only != 'true'
       run: |
         set +e
         set -o pipefail
@@ -58,7 +76,6 @@ runs:
         yfm -i ${{ inputs.src-root }} -o ${{ inputs.build-root }} --output-format md --add-map-file --allow-custom-resources | tee './build-md.log'
 
         echo "exitcode=$?" >> $GITHUB_OUTPUT
-
       shell: bash
 
     - name: Run docs2pdf
@@ -68,9 +85,12 @@ runs:
         set +e
         set -o pipefail
 
-        npx -y -- @diplodoc/pdf-generator@latest -i ${{ inputs.lint-root }}
+        npx -y -- @diplodoc/pdf-generator@latest -i ${{ steps.set-html-output.outputs.html_output }}
 
-        rsync -r --include='*.pdf' --include='*/' --exclude='*' ${{ inputs.lint-root }}/ ${{ inputs.build-root }}/
+        if [[ "${{ inputs.html-only }}" != "true" ]]; then
+          # Copy PDF files to build-root if we're not in html-only mode
+          rsync -r --include='*.pdf' --include='*/' --exclude='*' ${{ steps.set-html-output.outputs.html_output }}/ ${{ inputs.build-root }}/
+        fi
 
     - name: Save inputs
       run: |
@@ -78,25 +98,39 @@ runs:
         echo ${{ inputs.revision }} > ./inputs/revision
         echo ${{ github.event.number }} > ./inputs/pr-number
       shell: bash
+
     - name: Upload inputs
       uses: actions/upload-artifact@v4
       with:
         name: inputs
         path: inputs/
         retention-days: 1
-    - name: Upload build artifacts
+
+    - name: Upload HTML build artifacts
+      if: inputs.html-only == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-output-html
+        include-hidden-files: true
+        path: ${{ steps.set-html-output.outputs.html_output }}
+        retention-days: 1
+
+    - name: Upload MD build artifacts
+      if: inputs.html-only != 'true'
       uses: actions/upload-artifact@v4
       with:
         name: build-output-md
         include-hidden-files: true
         path: ${{ inputs.build-root }}
         retention-days: 1
+
     - name: Upload build log
       uses: actions/upload-artifact@v4
       with:
         name: build-log-html
         path: ./build-html.log
         retention-days: 1
+
     - name: Exit
       run: |
         exitcode=${{ steps.build-md2html.outputs.exitcode }}
