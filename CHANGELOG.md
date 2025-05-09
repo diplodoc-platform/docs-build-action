@@ -1,3 +1,10 @@
+## [3.1.6](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.5...v3.1.6) (2025-05-09)
+
+
+### Bug Fixes
+
+* for inputs include-hidden-files: true ([ec8ec57](https://github.com/diplodoc-platform/docs-build-action/commit/ec8ec57f1272a574beca2117114a3c39b0b33a15))
+
 ## [3.1.5](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.4...v3.1.5) (2025-04-28)
 
 
