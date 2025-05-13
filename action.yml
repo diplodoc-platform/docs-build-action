@@ -10,6 +10,8 @@ inputs:
     default: "./_docs-lint"
   build-root:
     default: "./_docs-build"
+  strict:
+    default: false
 
 runs:
   using: composite
@@ -45,7 +47,9 @@ runs:
         set +e
         set -o pipefail
 
-        yfm -i ${{ inputs.src-root }} -o ${{ inputs.lint-root }} ${{ steps.get-pdf-params.outputs.pdf_args }} | tee './build-html.log'
+        strict_param=$([ "${{ inputs.strict }}" == "true" ] && echo "--strict" || echo "")
+
+        yfm -i ${{ inputs.src-root }} -o ${{ inputs.lint-root }} ${{ steps.get-pdf-params.outputs.pdf_args }} $strict_param | tee './build-html.log'
 
         echo "exitcode=$?" >> $GITHUB_OUTPUT
       shell: bash
@@ -55,7 +59,9 @@ runs:
         set +e
         set -o pipefail
 
-        yfm -i ${{ inputs.src-root }} -o ${{ inputs.build-root }} --output-format md --add-map-file --allow-custom-resources | tee './build-md.log'
+        strict_param=$([ "${{ inputs.strict }}" == "true" ] && echo "--strict" || echo "")
+
+        yfm -i ${{ inputs.src-root }} -o ${{ inputs.build-root }} --output-format md --add-map-file --allow-custom-resources $strict_param | tee './build-md.log'
 
         echo "exitcode=$?" >> $GITHUB_OUTPUT
 
