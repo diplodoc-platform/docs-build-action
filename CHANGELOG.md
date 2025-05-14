@@ -1,3 +1,5 @@
+## [3.1.8](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.7...v3.1.8) (2025-05-14)
+
 ## [3.1.7](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.6...v3.1.7) (2025-05-14)
 
 ## [3.1.6](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.5...v3.1.6) (2025-05-09)
