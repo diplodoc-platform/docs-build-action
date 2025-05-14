@@ -10,6 +10,8 @@ inputs:
     default: "./_docs-lint"
   build-root:
     default: "./_docs-build"
+  cli-version:  
+    default: "latest"
 
 runs:
   using: composite
@@ -17,7 +19,7 @@ runs:
     - uses: actions/setup-node@v3
       with:
         node-version: 18
-    - run: npm i @diplodoc/cli -g
+    - run: npm i @diplodoc/cli@${{ inputs.cli-version }} -g
       shell: bash
 
     - name: Need pdf generation
