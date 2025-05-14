@@ -10,6 +10,7 @@ This GitHub action does two things:
 - `src-root` (default: `./`) - The root directory where the source documentation files are located. The action will use this directory as the base location to look for the source files that need to be built.
 - `lint-root` (default: `./_docs-lint`) - The root directory for the linting process. This is an optional parameter, and if not specified, the default value will be used.
 - `build-root` (default: `./_docs-build`) - The root directory for the built documentation. This is an optional parameter, and if not specified, the default value will be used.
+- `cli-version` (default: `latest`) - The @diplodoc/cli version used to build documentation. Can be precise version like `4.58.0` or some dist tag like `latest` or `stable`.
 
 ## Usage
 
