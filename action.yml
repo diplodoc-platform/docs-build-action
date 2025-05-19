@@ -47,7 +47,7 @@ runs:
         set +e
         set -o pipefail
 
-        yfm -i ${{ inputs.src-root }} -o ${{ inputs.lint-root }} ${{ steps.get-pdf-params.outputs.pdf_args }} | tee './build-html.log'
+        yfm -i ${{ inputs.src-root }} -o ${{ inputs.lint-root }} ${{ steps.get-pdf-params.outputs.pdf_args }} 2>&1 | tee './build-html.log'
 
         echo "exitcode=$?" >> $GITHUB_OUTPUT
       shell: bash
@@ -57,7 +57,7 @@ runs:
         set +e
         set -o pipefail
 
-        yfm -i ${{ inputs.src-root }} -o ${{ inputs.build-root }} --output-format md --add-map-file --allow-custom-resources | tee './build-md.log'
+        yfm -i ${{ inputs.src-root }} -o ${{ inputs.build-root }} --output-format md --add-map-file --allow-custom-resources 2>&1 | tee './build-md.log'
 
         echo "exitcode=$?" >> $GITHUB_OUTPUT
 
