@@ -1,3 +1,10 @@
+## [3.1.9](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.8...v3.1.9) (2025-05-19)
+
+
+### Bug Fixes
+
+* merge sterr with stdout ([74efbdf](https://github.com/diplodoc-platform/docs-build-action/commit/74efbdfc2b66d8f0d9f4d41df80d648a7cf2033f))
+
 ## [3.1.8](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.7...v3.1.8) (2025-05-14)
 
 ## [3.1.7](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.6...v3.1.7) (2025-05-14)
