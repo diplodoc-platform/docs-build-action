@@ -70,7 +70,7 @@ runs:
         set +e
         set -o pipefail
 
-        npx -y -- @diplodoc/pdf-generator@latest -i ${{ inputs.lint-root }}
+        npx -y -- @diplodoc/pdf-generator@latest -i ${{ inputs.lint-root }} --inject-platform-agnostic-fonts
 
         rsync -r --include='*.pdf' --include='*/' --exclude='*' ${{ inputs.lint-root }}/ ${{ inputs.build-root }}/
 
