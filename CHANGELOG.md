@@ -1,3 +1,10 @@
+## [3.1.10](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.9...v3.1.10) (2025-05-21)
+
+
+### Bug Fixes
+
+* add --inject-platform-agnostic-fonts flag ([659df3f](https://github.com/diplodoc-platform/docs-build-action/commit/659df3ffaa273f485d6bee3bf271129b5bb436bb))
+
 ## [3.1.9](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.8...v3.1.9) (2025-05-19)
 
 
