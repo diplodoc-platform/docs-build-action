@@ -70,7 +70,12 @@ runs:
         set +e
         set -o pipefail
 
-        npx -y -- @diplodoc/pdf-generator@latest -i ${{ inputs.lint-root }} --inject-platform-agnostic-fonts
+        sudo apt-get update
+        sudo apt-get install fonts-arphic-ukai
+        sudo apt-get install fonts-arphic-uming
+        sudo apt-get install fonts-noto-cjk
+
+        npx -y -- @diplodoc/pdf-generator@latest -i ${{ inputs.lint-root }}
 
         rsync -r --include='*.pdf' --include='*/' --exclude='*' ${{ inputs.lint-root }}/ ${{ inputs.build-root }}/
 
