@@ -1,3 +1,10 @@
+## [3.1.11](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.10...v3.1.11) (2025-05-27)
+
+
+### Bug Fixes
+
+* install font doc2pdf ([758ff4d](https://github.com/diplodoc-platform/docs-build-action/commit/758ff4dd755edc9381a2dcaacbc8458969105e0d))
+
 ## [3.1.10](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.9...v3.1.10) (2025-05-21)
 
 
