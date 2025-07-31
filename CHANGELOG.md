@@ -1,3 +1,10 @@
+## [3.1.12](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.11...v3.1.12) (2025-07-31)
+
+
+### Bug Fixes
+
+* build_doc ([66e9163](https://github.com/diplodoc-platform/docs-build-action/commit/66e91638d3617e5b7b1f67f47c8a91196735c20a))
+
 ## [3.1.11](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.10...v3.1.11) (2025-05-27)
 
 
