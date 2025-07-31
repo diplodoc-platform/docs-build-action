@@ -1,3 +1,10 @@
+## [3.1.13](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.12...v3.1.13) (2025-07-31)
+
+
+### Bug Fixes
+
+* bump node 20 ([aafdab0](https://github.com/diplodoc-platform/docs-build-action/commit/aafdab004490ce47a25cf95a617bac9d0bb0441a))
+
 ## [3.1.12](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.11...v3.1.12) (2025-07-31)
 
 
