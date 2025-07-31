@@ -19,7 +19,7 @@ runs:
     - uses: actions/setup-node@v3
       with:
         node-version: 18
-    - run: npm i @diplodoc/cli@${{ inputs.cli-version }} -g
+    - run: npm i @diplodoc/cli@${{ inputs.cli-version }} -g --save-exact
       shell: bash
 
     - name: Need pdf generation
