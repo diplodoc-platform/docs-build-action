@@ -16,10 +16,10 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v4
       with:
-        node-version: 20
-    - run: npm i @diplodoc/cli@${{ inputs.cli-version }} -g --save-exact
+        node-version: 22
+    - run: npm i @diplodoc/cli@${{ inputs.cli-version }} -g
       shell: bash
 
     - name: Need pdf generation
