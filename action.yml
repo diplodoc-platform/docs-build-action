@@ -43,8 +43,8 @@ runs:
         fi
       shell: bash
 
-    - name: Set effective source root
-      id: effective-src
+    - name: Set build source root
+      id: build-src
       run: |
         if [[ -n "${{ inputs.pre-build-args }}" ]]; then
           echo "root=./_docs-prebuild" >> $GITHUB_OUTPUT
@@ -56,8 +56,8 @@ runs:
     - name: Need pdf generation
       id: get-pdf-params
       run: |
-        if [[ -e "${{ steps.effective-src.outputs.root }}/.yfm" ]]; then
-          need_pdf=$(yq -r '.docs-viewer.pdf // false' < ${{ steps.effective-src.outputs.root }}/.yfm)
+        if [[ -e "${{ steps.build-src.outputs.root }}/.yfm" ]]; then
+          need_pdf=$(yq -r '.docs-viewer.pdf // false' < ${{ steps.build-src.outputs.root }}/.yfm)
         else
           need_pdf=false
         fi
@@ -78,7 +78,7 @@ runs:
         set +e
         set -o pipefail
 
-        yfm -i ${{ steps.effective-src.outputs.root }} -o ${{ inputs.lint-root }} ${{ steps.get-pdf-params.outputs.pdf_args }} 2>&1 | tee './build-html.log'
+        yfm -i ${{ steps.build-src.outputs.root }} -o ${{ inputs.lint-root }} ${{ steps.get-pdf-params.outputs.pdf_args }} 2>&1 | tee './build-html.log'
 
         echo "exitcode=$?" >> $GITHUB_OUTPUT
       shell: bash
@@ -88,7 +88,7 @@ runs:
         set +e
         set -o pipefail
 
-        yfm -i ${{ steps.effective-src.outputs.root }} -o ${{ inputs.build-root }} --output-format md --add-map-file --allow-custom-resources 2>&1 | tee './build-md.log'
+        yfm -i ${{ steps.build-src.outputs.root }} -o ${{ inputs.build-root }} --output-format md --add-map-file --allow-custom-resources 2>&1 | tee './build-md.log'
 
         echo "exitcode=$?" >> $GITHUB_OUTPUT
 
