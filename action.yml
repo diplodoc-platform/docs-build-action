@@ -10,8 +10,14 @@ inputs:
     default: "./_docs-lint"
   build-root:
     default: "./_docs-build"
-  cli-version:  
+  cli-version:
     default: "latest"
+  pre-build-args:
+    description: >
+      Additional CLI arguments for an optional pre-build (md2md) step.
+      If non-empty, sources will be transformed via md2md before the main build.
+      Example: --config=.yfm-dltech --varsPreset=dltech --no-template-vars --no-hash-includes --remove-empty-toc-items
+    default: ""
 
 runs:
   using: composite
@@ -22,11 +28,36 @@ runs:
     - run: npm i @diplodoc/cli@${{ inputs.cli-version }} -g
       shell: bash
 
+    - name: Pre-build md2md
+      if: inputs.pre-build-args != ''
+      run: |
+        set +e
+        set -o pipefail
+
+        yfm -i ${{ inputs.src-root }} -o ./_docs-prebuild --output-format md ${{ inputs.pre-build-args }} 2>&1 | tee './pre-build.log'
+
+        exitcode=$?
+        if [ "$exitcode" -ne 0 ]; then
+          echo "Pre-build failed with exit code: $exitcode"
+          exit $exitcode
+        fi
+      shell: bash
+
+    - name: Set effective source root
+      id: effective-src
+      run: |
+        if [[ -n "${{ inputs.pre-build-args }}" ]]; then
+          echo "root=./_docs-prebuild" >> $GITHUB_OUTPUT
+        else
+          echo "root=${{ inputs.src-root }}" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
+
     - name: Need pdf generation
       id: get-pdf-params
       run: |
-        if [[ -e "${{ inputs.src-root }}/.yfm" ]]; then
-          need_pdf=$(yq -r '.docs-viewer.pdf // false' < ${{ inputs.src-root }}/.yfm)
+        if [[ -e "${{ steps.effective-src.outputs.root }}/.yfm" ]]; then
+          need_pdf=$(yq -r '.docs-viewer.pdf // false' < ${{ steps.effective-src.outputs.root }}/.yfm)
         else
           need_pdf=false
         fi
@@ -47,7 +78,7 @@ runs:
         set +e
         set -o pipefail
 
-        yfm -i ${{ inputs.src-root }} -o ${{ inputs.lint-root }} ${{ steps.get-pdf-params.outputs.pdf_args }} 2>&1 | tee './build-html.log'
+        yfm -i ${{ steps.effective-src.outputs.root }} -o ${{ inputs.lint-root }} ${{ steps.get-pdf-params.outputs.pdf_args }} 2>&1 | tee './build-html.log'
 
         echo "exitcode=$?" >> $GITHUB_OUTPUT
       shell: bash
@@ -57,7 +88,7 @@ runs:
         set +e
         set -o pipefail
 
-        yfm -i ${{ inputs.src-root }} -o ${{ inputs.build-root }} --output-format md --add-map-file --allow-custom-resources 2>&1 | tee './build-md.log'
+        yfm -i ${{ steps.effective-src.outputs.root }} -o ${{ inputs.build-root }} --output-format md --add-map-file --allow-custom-resources 2>&1 | tee './build-md.log'
 
         echo "exitcode=$?" >> $GITHUB_OUTPUT
 
