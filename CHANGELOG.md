@@ -1,3 +1,10 @@
+## [3.2.0](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.14...v3.2.0) (2026-02-28)
+
+
+### Features
+
+* add optional pre-build (md2md) step ([5afede6](https://github.com/diplodoc-platform/docs-build-action/commit/5afede6ac1873102dd3d6c93aef394e4139db1e6))
+
 ## [3.1.14](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.13...v3.1.14) (2025-08-11)
 
 ## [3.1.13](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.12...v3.1.13) (2025-07-31)
