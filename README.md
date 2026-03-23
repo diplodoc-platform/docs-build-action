@@ -36,6 +36,6 @@ jobs:
       - name: Build
         uses: diplodoc-platform/docs-build-action@v3
         with:
-          revision: "pr-${{ github.event.pull_request.number }}"
+          revision: "${{ github.event.pull_request.head.sha }}"
           src-root: "./docs"
 ```
