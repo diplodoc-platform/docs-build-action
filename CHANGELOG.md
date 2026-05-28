@@ -1,3 +1,10 @@
+## [3.2.2](https://github.com/diplodoc-platform/docs-build-action/compare/v3.2.1...v3.2.2) (2026-05-28)
+
+
+### Bug Fixes
+
+* **deps:** updated node to 24 ([2e66635](https://github.com/diplodoc-platform/docs-build-action/commit/2e6663541151be7e6ba16d38e9f902a7c27b48d7))
+
 ## [3.2.1](https://github.com/diplodoc-platform/docs-build-action/compare/v3.2.0...v3.2.1) (2026-03-23)
 
 ## [3.2.0](https://github.com/diplodoc-platform/docs-build-action/compare/v3.1.14...v3.2.0) (2026-02-28)
