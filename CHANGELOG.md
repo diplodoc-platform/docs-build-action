@@ -1,3 +1,10 @@
+## [3.3.0](https://github.com/diplodoc-platform/docs-build-action/compare/v3.2.3...v3.3.0) (2026-06-15)
+
+
+### Features
+
+* add support ya opensource DOCSTOOLS-5023 ([719372c](https://github.com/diplodoc-platform/docs-build-action/commit/719372ce2f7511dc701d4a18eed727278ee49a5f))
+
 ## [3.2.3](https://github.com/diplodoc-platform/docs-build-action/compare/v3.2.2...v3.2.3) (2026-05-29)
 
 
