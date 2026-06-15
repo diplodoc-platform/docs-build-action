@@ -12,6 +12,11 @@ inputs:
     default: "./_docs-build"
   cli-version:
     default: "latest"
+  use-ya-opensource:
+    description: >
+      If 'true', do not install @diplodoc/cli. Instead download the opensource
+      `ya` bootstrap from yandex/yatool and run the build via `ya tool yfm-docs`.
+    default: "false"
   pre-build-args:
     description: >
       Additional CLI arguments for an optional pre-build (md2md) step.
@@ -25,7 +30,34 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version: 24
-    - run: npm i @diplodoc/cli@${{ inputs.cli-version }} -g
+
+    - name: Install @diplodoc/cli
+      if: inputs.use-ya-opensource != 'true'
+      run: npm i @diplodoc/cli@${{ inputs.cli-version }} -g
+      shell: bash
+
+    - name: Setup ya (opensource)
+      if: inputs.use-ya-opensource == 'true'
+      run: |
+        set -euo pipefail
+
+        # download the ya bootstrap into the workspace root
+        curl -sSL https://raw.githubusercontent.com/yandex/yatool/refs/heads/main/ya -o ya
+        chmod +x ya
+
+        # place the platform mapping config next to ya, in ./build
+        wget -P build https://raw.githubusercontent.com/yandex/yatool/refs/heads/main/build/mapping.conf.json
+      shell: bash
+
+    - name: Resolve yfm command
+      id: yfm-cmd
+      run: |
+        if [[ "${{ inputs.use-ya-opensource }}" == "true" ]]; then
+          # absolute path so the command works regardless of the step's cwd
+          echo "YFM_CMD=$(pwd)/ya tool yfm-docs" >> "$GITHUB_ENV"
+        else
+          echo "YFM_CMD=yfm" >> "$GITHUB_ENV"
+        fi
       shell: bash
 
     - name: Pre-build md2md
@@ -34,7 +66,7 @@ runs:
         set +e
         set -o pipefail
 
-        yfm -i ${{ inputs.src-root }} -o ./_docs-prebuild --output-format md ${{ inputs.pre-build-args }} 2>&1 | tee './pre-build.log'
+        $YFM_CMD -i ${{ inputs.src-root }} -o ./_docs-prebuild --output-format md ${{ inputs.pre-build-args }} 2>&1 | tee './pre-build.log'
 
         exitcode=$?
         if [ "$exitcode" -ne 0 ]; then
@@ -78,7 +110,7 @@ runs:
         set +e
         set -o pipefail
 
-        yfm -i ${{ steps.build-src.outputs.root }} -o ${{ inputs.lint-root }} ${{ steps.get-pdf-params.outputs.pdf_args }} 2>&1 | tee './build-html.log'
+        $YFM_CMD -i ${{ steps.build-src.outputs.root }} -o ${{ inputs.lint-root }} ${{ steps.get-pdf-params.outputs.pdf_args }} 2>&1 | tee './build-html.log'
 
         echo "exitcode=$?" >> $GITHUB_OUTPUT
       shell: bash
@@ -88,7 +120,7 @@ runs:
         set +e
         set -o pipefail
 
-        yfm -i ${{ steps.build-src.outputs.root }} -o ${{ inputs.build-root }} --output-format md --add-map-file --allow-custom-resources 2>&1 | tee './build-md.log'
+        $YFM_CMD -i ${{ steps.build-src.outputs.root }} -o ${{ inputs.build-root }} --output-format md --add-map-file --allow-custom-resources 2>&1 | tee './build-md.log'
 
         echo "exitcode=$?" >> $GITHUB_OUTPUT
 
