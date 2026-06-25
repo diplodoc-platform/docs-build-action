@@ -1,3 +1,10 @@
+## [3.3.1](https://github.com/diplodoc-platform/docs-build-action/compare/v3.3.0...v3.3.1) (2026-06-25)
+
+
+### Bug Fixes
+
+* **ci:** update actions versions ([86bbc36](https://github.com/diplodoc-platform/docs-build-action/commit/86bbc36dab6c7577fc36505dc58c0fd63183ccc6))
+
 ## [3.3.0](https://github.com/diplodoc-platform/docs-build-action/compare/v3.2.3...v3.3.0) (2026-06-15)
 
 
