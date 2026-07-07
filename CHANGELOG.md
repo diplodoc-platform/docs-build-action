@@ -1,3 +1,10 @@
+## [3.3.4](https://github.com/diplodoc-platform/docs-build-action/compare/v3.3.3...v3.3.4) (2026-07-07)
+
+
+### Bug Fixes
+
+* enable llms flag in build action ([100b023](https://github.com/diplodoc-platform/docs-build-action/commit/100b0234ec7ed52f1cfa792c399c03877ea97721))
+
 ## [3.3.3](https://github.com/diplodoc-platform/docs-build-action/compare/v3.3.2...v3.3.3) (2026-07-07)
 
 
