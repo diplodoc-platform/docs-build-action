@@ -23,6 +23,10 @@ inputs:
       If non-empty, sources will be transformed via md2md before the main build.
       Example: --config=.yfm-dltech --varsPreset=dltech --no-template-vars --no-hash-includes --remove-empty-toc-items
     default: ""
+  llms:
+    description: >
+      If 'true', enables llms.txt and llms-full.txt generation during md2md build.
+    default: "false"
 
 runs:
   using: composite
@@ -120,7 +124,12 @@ runs:
         set +e
         set -o pipefail
 
-        $YFM_CMD -i ${{ steps.build-src.outputs.root }} -o ${{ inputs.build-root }} --output-format md --add-map-file --allow-custom-resources 2>&1 | tee './build-md.log'
+        llms_args=''
+        if [[ "${{ inputs.llms }}" == "true" ]]; then
+          llms_args='--llms'
+        fi
+
+        $YFM_CMD -i ${{ steps.build-src.outputs.root }} -o ${{ inputs.build-root }} --output-format md --add-map-file --allow-custom-resources $llms_args 2>&1 | tee './build-md.log'
 
         echo "exitcode=$?" >> $GITHUB_OUTPUT
 
