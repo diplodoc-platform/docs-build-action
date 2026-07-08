@@ -110,7 +110,7 @@ runs:
         set +e
         set -o pipefail
 
-        $YFM_CMD -i ${{ steps.build-src.outputs.root }} -o ${{ inputs.lint-root }} ${{ steps.get-pdf-params.outputs.pdf_args }} --llms 2>&1 | tee './build-html.log'
+        $YFM_CMD -i ${{ steps.build-src.outputs.root }} -o ${{ inputs.lint-root }} ${{ steps.get-pdf-params.outputs.pdf_args }}  2>&1 | tee './build-html.log'
 
         echo "exitcode=$?" >> $GITHUB_OUTPUT
       shell: bash
@@ -120,7 +120,7 @@ runs:
         set +e
         set -o pipefail
 
-        $YFM_CMD -i ${{ steps.build-src.outputs.root }} -o ${{ inputs.build-root }} --output-format md --add-map-file --allow-custom-resources --llms 2>&1 | tee './build-md.log'
+        $YFM_CMD -i ${{ steps.build-src.outputs.root }} -o ${{ inputs.build-root }} --output-format md --add-map-file --allow-custom-resources  2>&1 | tee './build-md.log'
 
         echo "exitcode=$?" >> $GITHUB_OUTPUT
 
