@@ -1,3 +1,10 @@
+## [3.3.6](https://github.com/diplodoc-platform/docs-build-action/compare/v3.3.5...v3.3.6) (2026-07-25)
+
+
+### Bug Fixes
+
+* add fallback to @diplodoc/cli when ya tool yfm-docs is unavailable DOCSTOOLS-6309 ([6ed6ea9](https://github.com/diplodoc-platform/docs-build-action/commit/6ed6ea97ada1c57f757838bd68844cfe85dcc991))
+
 ## [3.3.5](https://github.com/diplodoc-platform/docs-build-action/compare/v3.3.4...v3.3.5) (2026-07-08)
 
 
