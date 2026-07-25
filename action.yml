@@ -31,11 +31,6 @@ runs:
       with:
         node-version: 24
 
-    - name: Install @diplodoc/cli
-      if: inputs.use-ya-opensource != 'true'
-      run: npm i @diplodoc/cli@${{ inputs.cli-version }} -g
-      shell: bash
-
     - name: Setup ya (opensource)
       if: inputs.use-ya-opensource == 'true'
       run: |
@@ -49,10 +44,31 @@ runs:
         wget -P build https://raw.githubusercontent.com/yandex/yatool/refs/heads/main/build/mapping.conf.json
       shell: bash
 
+    - name: Verify ya tool yfm-docs
+      id: verify-yfm
+      if: inputs.use-ya-opensource == 'true'
+      run: |
+        set +e
+        ya tool yfm-docs --help > /dev/null 2>&1
+        exitcode=$?
+        if [ "$exitcode" -ne 0 ]; then
+          echo "ya tool yfm-docs is not available, falling back to @diplodoc/cli from npm"
+          echo "fallback=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "ya tool yfm-docs is available"
+          echo "fallback=false" >> "$GITHUB_OUTPUT"
+        fi
+      shell: bash
+
+    - name: Install @diplodoc/cli
+      if: inputs.use-ya-opensource != 'true' || steps.verify-yfm.outputs.fallback == 'true'
+      run: npm i @diplodoc/cli@${{ inputs.cli-version }} -g
+      shell: bash
+
     - name: Resolve yfm command
       id: yfm-cmd
       run: |
-        if [[ "${{ inputs.use-ya-opensource }}" == "true" ]]; then
+        if [[ "${{ inputs.use-ya-opensource }}" == "true" && "${{ steps.verify-yfm.outputs.fallback }}" != "true" ]]; then
           # absolute path so the command works regardless of the step's cwd
           echo "YFM_CMD=$(pwd)/ya tool yfm-docs" >> "$GITHUB_ENV"
         else

@@ -11,6 +11,10 @@ This GitHub action does two things:
 - `lint-root` (default: `./_docs-lint`) - The root directory for the linting process. This is an optional parameter, and if not specified, the default value will be used.
 - `build-root` (default: `./_docs-build`) - The root directory for the built documentation. This is an optional parameter, and if not specified, the default value will be used.
 - `cli-version` (default: `latest`) - The @diplodoc/cli version used to build documentation. Can be precise version like `4.58.0` or some dist tag like `latest` or `stable`.
+- `use-ya-opensource` (default: `false`) - If `true`, do not install `@diplodoc/cli`. Instead download the opensource `ya` bootstrap from yandex/yatool and run the build via `ya tool yfm-docs`. If `ya tool yfm-docs` is not available (e.g. the platform mapping config does not include yfm-docs), the action automatically falls back to installing `@diplodoc/cli` from npm.
+- `pre-build-args` (default: `""`) - Additional CLI arguments for an optional pre-build (md2md) step. If non-empty, sources will be transformed via md2md before the main build.
+- `use-ya-opensource` (default: `false`) - If `true`, do not install `@diplodoc/cli` from npm. Instead download the opensource `ya` bootstrap from [yandex/yatool](https://github.com/yandex/yatool) and run the build via `ya tool yfm-docs`. If `ya tool yfm-docs` is not available (e.g. the tool is missing from `mapping.conf.json`), the action automatically falls back to installing `@diplodoc/cli` from npm so the build never fails.
+- `pre-build-args` (default: `""`) - Additional CLI arguments for an optional pre-build (md2md) step. If non-empty, sources will be transformed via md2md before the main build. Example: `--config=.yfm-dltech --varsPreset=dltech --no-template-vars --no-hash-includes --remove-empty-toc-items`
 
 ## Usage
 
